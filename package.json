@@ -1,0 +1,17 @@
+{
+  "name": "ideastamp-a3",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Assignment 3 prototype for IdeaStamp: smart contracts, tests, and dApp wireframe.",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "clean": "hardhat clean",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
+    "deploy:sepolia": "hardhat run scripts/deploy.js --network sepolia"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.10"
+  }
+}

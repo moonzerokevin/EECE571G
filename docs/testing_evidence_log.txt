@@ -1,0 +1,92 @@
+=== Environment ===
+date: 2026-03-22T18:05Z
+v22.22.0
+10.9.4
+2.28.6
+Solidity (hardhat.config.js): 0.8.24
+
+=== npm install ===
+
+up to date, audited 595 packages in 423ms
+
+113 packages are looking for funding
+  run `npm fund` for details
+
+41 vulnerabilities (21 low, 14 moderate, 6 high)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+=== npm run compile ===
+
+> ideastamp-a3@1.0.0 compile
+> hardhat compile
+
+Nothing to compile
+
+=== npm test ===
+
+> ideastamp-a3@1.0.0 test
+> hardhat test
+
+
+
+  DisputeRegistryLite
+    ✔ opens a dispute when both commitments exist (249ms)
+    ✔ rejects disputes with unknown commitments
+    ✔ allows owner to resolve a dispute
+
+  IdeaRegistry
+    ✔ stores a commitment successfully
+    ✔ rejects duplicate commitment hashes
+    ✔ rejects insufficient commit fees
+    ✔ reveals a commitment successfully
+    ✔ rejects reveal for nonexistent commitment
+    ✔ rejects double reveal
+    ✔ tracks commitments by author
+    ✔ allows only owner to update fee
+
+
+  11 passing (326ms)
+
+
+=== frontend: npm run build ===
+
+> frontend@0.1.0 build
+> next build
+
+   ▲ Next.js 15.2.4
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/10) ...
+   Generating static pages (2/10) 
+   Generating static pages (4/10) 
+   Generating static pages (7/10) 
+ ✓ Generating static pages (10/10)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                      172 B         104 kB
+├ ○ /_not-found                            977 B         102 kB
+├ ○ /commit                              3.73 kB         163 kB
+├ ○ /dispute                             3.46 kB         163 kB
+├ ○ /records                             2.22 kB         145 kB
+├ ○ /reveal                              2.69 kB         162 kB
+└ ○ /verify                              3.86 kB         146 kB
++ First Load JS shared by all             101 kB
+  ├ chunks/4bd1b696-7c579d56c0cb6ba5.js  53.2 kB
+  ├ chunks/684-cca9f1c0d6c92101.js       45.3 kB
+  └ other shared chunks (total)          1.98 kB
+
+
+○  (Static)  prerendered as static content
+
