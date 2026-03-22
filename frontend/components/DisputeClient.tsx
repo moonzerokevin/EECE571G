@@ -5,6 +5,7 @@ import { useAccount, useReadContract, useWriteContract, useWaitForTransactionRec
 import { disputeRegistryAbi, disputeRegistryAddress, ideaRegistryAddress } from "@/lib/contracts";
 import { parseBytes32Hex } from "@/lib/hash";
 import { ContractHint } from "./ContractHint";
+import { MainnetDevWarning } from "./MainnetDevWarning";
 
 const OUTCOMES = [
   { v: 1, label: "Rejected" },
@@ -111,6 +112,7 @@ export function DisputeClient() {
 
   return (
     <div className="space-y-10">
+      <MainnetDevWarning />
       <ContractHint />
       {!ideaReg || !disputeReg ? null : (
         <p className="text-xs text-zinc-500">

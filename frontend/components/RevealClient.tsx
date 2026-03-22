@@ -16,6 +16,7 @@ import {
   parseBytes32Hex,
 } from "@/lib/hash";
 import { ContractHint } from "./ContractHint";
+import { MainnetDevWarning } from "./MainnetDevWarning";
 
 const ZERO: Hex =
   "0x0000000000000000000000000000000000000000000000000000000000000000";
@@ -87,6 +88,7 @@ export function RevealClient() {
 
   return (
     <div className="space-y-6">
+      <MainnetDevWarning />
       <ContractHint />
       <p className="text-sm text-zinc-600 dark:text-zinc-400">
         Use the same content/file, metadata, and salt as at commit time; chain ID and author address must

@@ -18,6 +18,7 @@ import {
   randomSalt32,
 } from "@/lib/hash";
 import { ContractHint } from "./ContractHint";
+import { MainnetDevWarning } from "./MainnetDevWarning";
 
 const ZERO: Hex =
   "0x0000000000000000000000000000000000000000000000000000000000000000";
@@ -33,10 +34,16 @@ export function CommitClient() {
   const [saltMode, setSaltMode] = useState<"random" | "text" | "hex">("random");
   const [saltText, setSaltText] = useState("");
   const [saltHex, setSaltHex] = useState("");
-  const [randomSalt, setRandomSalt] = useState<Hex>(() => randomSalt32());
+  /** null until client effect runs — avoids SSR/client mismatch (crypto.random). */
+  const [randomSalt, setRandomSalt] = useState<Hex | null>(null);
   const [cid, setCid] = useState("");
 
-  const { data: commitFee } = useReadContract({
+  const {
+    data: commitFee,
+    error: commitFeeError,
+    isFetching: commitFeeLoading,
+    isError: commitFeeIsError,
+  } = useReadContract({
     address: registry,
     abi: ideaRegistryAbi,
     functionName: "commitFeeWei",
@@ -59,13 +66,21 @@ export function CommitClient() {
     return hashUtf8(metadata);
   }, [metadata]);
 
-  const prevSaltMode = useRef(saltMode);
+  const prevSaltMode = useRef<typeof saltMode | null>(null);
   useEffect(() => {
-    if (prevSaltMode.current !== saltMode && saltMode === "random") {
+    const was = prevSaltMode.current;
+    prevSaltMode.current = saltMode;
+    if (saltMode !== "random") return;
+    if (was === null || was !== "random") {
       setRandomSalt(randomSalt32());
     }
-    prevSaltMode.current = saltMode;
   }, [saltMode]);
+
+  useEffect(() => {
+    return () => {
+      prevSaltMode.current = null;
+    };
+  }, []);
 
   const salt: Hex | null = useMemo(() => {
     if (saltMode === "random") return randomSalt;
@@ -106,6 +121,7 @@ export function CommitClient() {
 
   return (
     <div className="space-y-6">
+      <MainnetDevWarning />
       <ContractHint />
       <p className="text-sm text-zinc-600 dark:text-zinc-400">
         Hash text or file bytes with Keccak-256 locally, combine with salt and metadata hash per the contract
@@ -198,7 +214,7 @@ export function CommitClient() {
         {saltMode === "random" && (
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <span className="font-mono text-xs break-all text-zinc-600 dark:text-zinc-400">
-              {randomSalt}
+              {randomSalt ?? "…"}
             </span>
             <button
               type="button"
@@ -235,8 +251,18 @@ export function CommitClient() {
           <span className="text-zinc-500">commitmentHash:</span> {commitmentPreview ?? "—"}
         </p>
         <p className="mt-1 text-zinc-600 dark:text-zinc-400">
-          commitFeeWei: {commitFee != null ? commitFee.toString() : "—"}
+          commitFeeWei:{" "}
+          {commitFeeLoading ? "loading…" : commitFee != null ? commitFee.toString() : "—"}
         </p>
+        {commitFeeIsError && commitFeeError && (
+          <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+            Could not read fee from chain: {commitFeeError.message}. Is{" "}
+            <code className="font-mono">npx hardhat node</code> running? Does{" "}
+            <code className="font-mono">NEXT_PUBLIC_IDEA_REGISTRY</code> match your deploy? Restart{" "}
+            <code className="font-mono">npm run dev</code> after editing{" "}
+            <code className="font-mono">.env.local</code>.
+          </p>
+        )}
       </div>
 
       <button

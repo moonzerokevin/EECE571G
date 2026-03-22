@@ -1,15 +1,22 @@
 import type { Address } from "viem";
 
-export function ideaRegistryAddress(): Address | undefined {
-  const v = process.env.NEXT_PUBLIC_IDEA_REGISTRY;
-  if (!v || !/^0x[a-fA-F0-9]{40}$/.test(v)) return undefined;
+/** Must use literal `process.env.NEXT_PUBLIC_*` so Next.js inlines values into the client bundle. */
+function parseAddressEnv(raw: string | undefined): Address | undefined {
+  if (!raw) return undefined;
+  const v = raw
+    .trim()
+    .replace(/^["']|["']$/g, "")
+    .trim();
+  if (!/^0x[a-fA-F0-9]{40}$/i.test(v)) return undefined;
   return v as Address;
 }
 
+export function ideaRegistryAddress(): Address | undefined {
+  return parseAddressEnv(process.env.NEXT_PUBLIC_IDEA_REGISTRY);
+}
+
 export function disputeRegistryAddress(): Address | undefined {
-  const v = process.env.NEXT_PUBLIC_DISPUTE_REGISTRY;
-  if (!v || !/^0x[a-fA-F0-9]{40}$/.test(v)) return undefined;
-  return v as Address;
+  return parseAddressEnv(process.env.NEXT_PUBLIC_DISPUTE_REGISTRY);
 }
 
 export const ideaRegistryAbi = [

@@ -107,9 +107,11 @@ npx hardhat node
 ```bash
 npm run deploy:local
 ```
-Save the printed `IdeaRegistry` and `DisputeRegistryLite` addresses.
+This also **writes** `frontend/.env.local` with the two deployed addresses (creating it from `.env.local.example` if needed). It does **not** change `.env.local.example`, so that file stays a clean template in git.
 
 Hardhat prints test account private keys; import one (e.g. the first) in MetaMask to pay `commit` / `dispute` fees in wei. Network: **RPC** `http://127.0.0.1:8545`, **chain ID** `31337` (matches the `hardhat` chain in wagmi).
+
+**Do not stay on Ethereum Mainnet:** your `.env.local` addresses only exist on the local chain. On mainnet the same `0x…` is a different account — MetaMask/Blockaid may show a “malicious address” warning and you would send real ETH. Switch MetaMask to **Localhost 31337** for this project.
 
 ### 5. Minimal web UI (`frontend/`)
 Course-scope UI: injected wallet, local Keccak / `encodePacked`, contract addresses from env.
@@ -117,20 +119,21 @@ Course-scope UI: injected wallet, local Keccak / `encodePacked`, contract addres
 **Terminal C**:
 ```bash
 cd frontend
-cp .env.local.example .env.local
-# Edit .env.local: set the two contract addresses from deploy (0x…)
 npm install
 npm run dev
 ```
+If you have not run `deploy:local` yet, copy `cp .env.local.example .env.local` once, then deploy from the repo root to fill in addresses automatically.
 Open the URL shown in the terminal (usually `http://localhost:3000`).
+
+**Important:** `NEXT_PUBLIC_*` variables are picked up when the Next.js dev server **starts**. After you edit `frontend/.env.local`, stop and run `npm run dev` again. Keep `npx hardhat node` running in another terminal so reads like `commitFeeWei` succeed.
 
 Production check: `cd frontend && npm run build`.
 
 ### After pushing to GitHub
 1. `git clone …` and `cd` into the repo root  
 2. Root: `npm install` → `npm run compile` / `npm test` (optional)  
-3. `npx hardhat node` + `npm run deploy:local`  
-4. `frontend/`: `cp .env.local.example .env.local`, fill addresses → `npm install` → `npm run dev`  
+3. `npx hardhat node` + `npm run deploy:local` (updates `frontend/.env.local`)  
+4. `frontend/`: `npm install` → `npm run dev` (first time only: `cp .env.local.example .env.local` if deploy has not created `.env.local` yet)  
 
 Do **not** commit `frontend/.env.local` (it is gitignored); each machine needs its own addresses after deploy.
 
