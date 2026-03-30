@@ -6,8 +6,8 @@ export default function Home() {
       <h1 className="text-2xl font-semibold tracking-tight">IdeaStamp — course prototype</h1>
       <p className="leading-relaxed text-zinc-600 dark:text-zinc-400">
         Minimal end-to-end flow from the Assignment 2 white paper: on-chain salted commitments, optional
-        reveal, public verification, and a lightweight dispute registry. Token staking and DAO features are
-        out of scope for this assignment.
+        reveal, and public verification. Token staking, DAO, and extended dispute flows are out of scope for
+        this UI prototype.
       </p>
       <ul className="grid gap-3 sm:grid-cols-2">
         {[
@@ -15,7 +15,6 @@ export default function Home() {
           { href: "/reveal", t: "Reveal", d: "Reveal contentHash and salt" },
           { href: "/verify", t: "Verify", d: "Derive or look up a commitment on-chain" },
           { href: "/records", t: "My Records", d: "Commitments for the connected wallet" },
-          { href: "/dispute", t: "Dispute", d: "openDispute, lookup, owner resolve" },
         ].map(({ href, t, d }) => (
           <li key={href}>
             <Link
@@ -30,8 +29,8 @@ export default function Home() {
       </ul>
       <p className="text-sm text-zinc-500">
         Local chain: run <code className="font-mono">npx hardhat node</code>, then{" "}
-        <code className="font-mono">npm run deploy:local</code>, and put both contract addresses in{" "}
-        <code className="font-mono">frontend/.env.local</code>.
+        <code className="font-mono">npm run deploy:local</code> (updates{" "}
+        <code className="font-mono">frontend/.env.local</code>).
       </p>
     </div>
   );

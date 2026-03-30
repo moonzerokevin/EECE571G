@@ -19,6 +19,8 @@ import {
 } from "@/lib/hash";
 import { ContractHint } from "./ContractHint";
 import { MainnetDevWarning } from "./MainnetDevWarning";
+import { TxErrorAlert } from "./TxErrorAlert";
+import { GAS_COMMIT } from "@/lib/txGas";
 
 const ZERO: Hex =
   "0x0000000000000000000000000000000000000000000000000000000000000000";
@@ -105,6 +107,7 @@ export function CommitClient() {
       functionName: "commit",
       args: [commitmentPreview, metadataHash, cid],
       value: commitFee,
+      gas: GAS_COMMIT,
     });
   }
 
@@ -274,7 +277,7 @@ export function CommitClient() {
         {isPending || isConfirming ? "Sending transaction…" : "Submit commit"}
       </button>
 
-      {error && <p className="text-sm text-red-600">{error.message}</p>}
+      <TxErrorAlert error={error} />
       {hash && <p className="font-mono text-xs break-all text-zinc-600">tx: {hash}</p>}
       {isSuccess && <p className="text-sm text-green-700 dark:text-green-400">Transaction confirmed.</p>}
     </div>

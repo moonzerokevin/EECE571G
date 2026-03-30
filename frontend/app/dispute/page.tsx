@@ -1,10 +1,6 @@
-import { DisputeClient } from "@/components/DisputeClient";
+import { redirect } from "next/navigation";
 
+/** Dispute UI is intentionally hidden from nav; keep route from 404 for old links. */
 export default function DisputePage() {
-  return (
-    <div>
-      <h1 className="mb-6 text-xl font-semibold">Dispute</h1>
-      <DisputeClient />
-    </div>
-  );
+  redirect("/");
 }

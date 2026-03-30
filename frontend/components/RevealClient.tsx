@@ -17,6 +17,8 @@ import {
 } from "@/lib/hash";
 import { ContractHint } from "./ContractHint";
 import { MainnetDevWarning } from "./MainnetDevWarning";
+import { TxErrorAlert } from "./TxErrorAlert";
+import { GAS_REVEAL } from "@/lib/txGas";
 
 const ZERO: Hex =
   "0x0000000000000000000000000000000000000000000000000000000000000000";
@@ -74,6 +76,7 @@ export function RevealClient() {
       abi: ideaRegistryAbi,
       functionName: "reveal",
       args: [contentHash, salt, metadataHash, cid],
+      gas: GAS_REVEAL,
     });
   }
 
@@ -185,7 +188,7 @@ export function RevealClient() {
         {isPending || isConfirming ? "Sending…" : "reveal"}
       </button>
 
-      {error && <p className="text-sm text-red-600">{error.message}</p>}
+      <TxErrorAlert error={error} />
       {hash && <p className="font-mono text-xs break-all text-zinc-600">tx: {hash}</p>}
       {isSuccess && lastReveal.current && (
         <p className="text-sm text-green-700 dark:text-green-400">

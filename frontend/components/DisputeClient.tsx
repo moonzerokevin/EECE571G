@@ -6,6 +6,8 @@ import { disputeRegistryAbi, disputeRegistryAddress, ideaRegistryAddress } from 
 import { parseBytes32Hex } from "@/lib/hash";
 import { ContractHint } from "./ContractHint";
 import { MainnetDevWarning } from "./MainnetDevWarning";
+import { TxErrorAlert } from "./TxErrorAlert";
+import { GAS_OPEN_DISPUTE, GAS_RESOLVE_DISPUTE } from "@/lib/txGas";
 
 const OUTCOMES = [
   { v: 1, label: "Rejected" },
@@ -86,6 +88,7 @@ export function DisputeClient() {
       functionName: "openDispute",
       args: [challengedH, challengerH, reasonUri],
       value: disputeFee,
+      gas: GAS_OPEN_DISPUTE,
     });
   }
 
@@ -98,6 +101,7 @@ export function DisputeClient() {
       abi: disputeRegistryAbi,
       functionName: "resolveDispute",
       args: [id, outcome, resolutionUri],
+      gas: GAS_RESOLVE_DISPUTE,
     });
   }
 
@@ -152,7 +156,7 @@ export function DisputeClient() {
         >
           {openPending || openConfirming ? "Sending…" : "openDispute"}
         </button>
-        {openErr && <p className="text-sm text-red-600">{openErr.message}</p>}
+        <TxErrorAlert error={openErr} />
         {openHash && <p className="font-mono text-xs break-all">{openHash}</p>}
         {openOk && <p className="text-sm text-green-700 dark:text-green-400">Dispute opened.</p>}
       </section>
@@ -228,7 +232,7 @@ export function DisputeClient() {
         >
           {resPending || resConfirming ? "Sending…" : "resolveDispute"}
         </button>
-        {resErr && <p className="text-sm text-red-600">{resErr.message}</p>}
+        <TxErrorAlert error={resErr} />
         {resOk && <p className="text-sm text-green-700 dark:text-green-400">Resolved.</p>}
       </section>
     </div>
