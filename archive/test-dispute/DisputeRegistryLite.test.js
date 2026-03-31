@@ -1,3 +1,7 @@
+/**
+ * Archived: not executed by `hardhat test` (paths.tests is ./test only).
+ * To run again: move this file back to ../../test/DisputeRegistryLite.test.js
+ */
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 

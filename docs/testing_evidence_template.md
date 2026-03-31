@@ -27,26 +27,14 @@ Full output is in **`docs/testing_evidence_log.txt`** (environment, `npm install
 > ideastamp-a3@1.0.0 test
 > hardhat test
 
-  DisputeRegistryLite
-    ✔ opens a dispute when both commitments exist
-    ✔ rejects disputes with unknown commitments
-    ✔ allows owner to resolve a dispute
-
   IdeaRegistry
-    ✔ stores a commitment successfully
-    ✔ rejects duplicate commitment hashes
-    ✔ rejects insufficient commit fees
-    ✔ reveals a commitment successfully
-    ✔ rejects reveal for nonexistent commitment
-    ✔ rejects double reveal
-    ✔ tracks commitments by author
-    ✔ allows only owner to update fee
+    ✔ … (20 tests total: commit/reveal paths, fees, owner ops, view helpers, negative cases)
 
-  11 passing
+  20 passing
 ```
 
 ## Summary
-- Passing tests: **11**
+- Passing tests: **20** on `IdeaRegistry` (`DisputeRegistryLite` suite archived under `archive/test-dispute/`, not run by `npm test`)
 - Warnings: `npm install` audit notices (e.g. glob); do not block compile/test. Watch Next.js security advisories when upgrading.
 - Fix after first run: `IdeaRegistry` test `Committed` event — use `anyUint` matchers (not `anyValue()`) for uint args. See test file.
 
@@ -61,7 +49,7 @@ Not official grading; follow your TA and rubric.
 | Core contracts aligned with A2 white paper, compile | `IdeaRegistry.sol`, `DisputeRegistryLite.sol`; commit–reveal–verify + lite dispute; ERC20/staking/DAO deferred (see `README.md`, `whitepaper_feature_mapping.md`). |
 | Comments, events, access control, validation | NatSpec/comments, `event`, `onlyOwner`, custom errors, etc. |
 | Multiple contracts + interaction | `DisputeRegistryLite` uses `IIdeaRegistry`; architecture in root `README.md`. |
-| Unit tests: main paths + failures/unauthorized | Hardhat, 11 tests; duplicates, fees, failed reveal, dispute edges. |
+| Unit tests: main paths + failures/unauthorized | Hardhat, 20 tests on `IdeaRegistry` (dispute suite archived, not run by default). |
 | Framework + reproducible steps | `npm test` in `package.json`; evidence in this file and `testing_evidence_log.txt`. |
 | dApp wireframe: main screens and journey | `IdeaStamp_A3_Wireframe.pdf` (root + `frontend_wireframe/`); wallet, Commit/Reveal/Verify, Records, Dispute Lite + admin. |
 | Brief technical doc: compile, test, wireframe | Root `README.md`, `docs/README.md`, `docs/submission_checklist.md`. |

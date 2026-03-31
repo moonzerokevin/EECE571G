@@ -36,11 +36,6 @@ Nothing to compile
 
 
 
-  DisputeRegistryLite
-    ✔ opens a dispute when both commitments exist (249ms)
-    ✔ rejects disputes with unknown commitments
-    ✔ allows owner to resolve a dispute
-
   IdeaRegistry
     ✔ stores a commitment successfully
     ✔ rejects duplicate commitment hashes
@@ -50,9 +45,23 @@ Nothing to compile
     ✔ rejects double reveal
     ✔ tracks commitments by author
     ✔ allows only owner to update fee
+    ✔ rejects commit with zero commitment hash
+    ✔ getCommitment reverts when commitment does not exist
+    ✔ hasCommitment and isRevealed reflect state
+    ✔ rejects reveal when stored metadata does not match reveal args
+    ✔ rejects reveal by non-author when commitment binds another address
+    ✔ commit and reveal with zero metadataHash
+    ✔ allows owner to transfer ownership
+    ✔ rejects transferOwnership to zero address
+    ✔ rejects transferOwnership from non-owner
+    ✔ allows owner to withdraw balance
+    ✔ rejects withdraw from non-owner
+    ✔ rejects withdraw to zero address
 
 
-  11 passing (326ms)
+  20 passing
+
+  (DisputeRegistryLite tests live in archive/test-dispute/ and are not run by default.)
 
 
 === frontend: npm run build ===

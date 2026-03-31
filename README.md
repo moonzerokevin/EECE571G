@@ -56,8 +56,9 @@ IdeaStamp_A3_Package/
 │   └── interfaces/
 │       └── IIdeaRegistry.sol
 ├── test/
-│   ├── IdeaRegistry.test.js
-│   └── DisputeRegistryLite.test.js
+│   └── IdeaRegistry.test.js
+├── archive/test-dispute/
+│   └── DisputeRegistryLite.test.js   # not run by npm test; move to test/ to enable
 ├── scripts/
 │   └── deploy.js
 ├── docs/
