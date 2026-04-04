@@ -1,190 +1,163 @@
-# IdeaStamp Assignment 3 Prototype
+# IdeaStamp Assignment 3 Submission
 
-## Overview
-This package implements a course-scope prototype for **IdeaStamp**, the Web3 dApp proposed in Assignment 2. The prototype focuses on the core workflow promised in the white paper:
+## Project Summary
+IdeaStamp is a blockchain-based priority proof system for early-stage research ideas and draft outputs. This Assignment 3 submission implements the core commit-reveal workflow proposed in the Assignment 2 white paper:
 
-1. **Commit** a salted hash proving prior possession of an idea or preprint draft.
-2. **Reveal** the original content hash and salt later.
-3. **Verify** that the reveal matches the earlier on-chain commitment.
-4. **Optionally register a dispute** in a lightweight way for contested claims.
+1. A user creates a salted commitment off-chain.
+2. The commitment hash is stored on-chain with a timestamp and block number.
+3. The original author may later reveal the content hash and salt.
+4. Any third party can verify that the revealed material matches the earlier on-chain commitment.
 
-This is intentionally **not** a production-ready system and does **not** implement the full long-term tokenomics/governance vision from the white paper.
+The submission focuses on logical correctness, testability, and a clear dApp user flow. It is not intended to be production-ready.
 
-## White Paper Alignment
-| White paper feature | Assignment 3 implementation status |
-| --- | --- |
-| Timestamped commitment registry | Implemented in `IdeaRegistry.sol` |
-| Commit–reveal verification | Implemented in `IdeaRegistry.sol` |
-| Public verifiability | Implemented through contract getters + pure hash helper |
-| Privacy-preserving salted commitments | Implemented through off-chain commitment construction |
-| Dispute module | Partially implemented in `DisputeRegistryLite.sol` |
-| ERC20 incentives / staking | Deferred to future work |
-| DAO governance | Deferred to future work |
-| Organization memberships | Deferred to future work |
+## Submission Contents
+- Smart contract source code in `contracts/`
+- Unit tests in `test/`
+- Wireframe PDF in `frontend_wireframe/IdeaStamp_A3_Wireframe.pdf`
+- This `README.md` as the brief technical documentation
+- Supporting evidence and version notes in `docs/`
 
-## Contract Architecture
-### 1. `IdeaRegistry.sol`
-Main contract for storing research-priority commitments.
+## Smart Contract Design
 
-Core responsibilities:
-- store commitment hashes on-chain
-- prevent duplicate commitments
-- record commit timestamp and block number
-- allow reveal of content hash + salt later
-- expose records for verification and user dashboards
+### `IdeaRegistry.sol`
+`IdeaRegistry.sol` is the main contract used in this submission. It stores commitments and supports later reveal and verification.
+
+Main responsibilities:
+- store unique commitment hashes on-chain
+- record the author, commit timestamp, and block number
+- support later reveal of `contentHash` and `salt`
+- expose record data for public verification
+- maintain simple owner-controlled fee administration
 
 Commitment formula:
+
 ```solidity
 keccak256(abi.encodePacked(chainId, authorAddress, contentHash, salt, metadataHash))
 ```
 
-### 2. `DisputeRegistryLite.sol`
-Lightweight registry for disputed claims. This contract is intentionally simple for course scope.
+### `DisputeRegistryLite.sol`
+`DisputeRegistryLite.sol` is included as an additional exploratory contract from the broader project design. It references `IdeaRegistry` through `IIdeaRegistry` and shows how a lightweight dispute registry could be connected to the commitment system. It is not part of the primary tested user flow for this Assignment 3 submission.
 
-Core responsibilities:
-- open a dispute against an existing commitment
-- link a challenger commitment to the challenged commitment
-- record a reason URI
-- allow an owner/admin to mark the dispute resolved
+## White Paper Alignment
+| White paper feature | Status in this submission |
+| --- | --- |
+| Timestamped commitment registry | Implemented |
+| Commit-reveal proof workflow | Implemented |
+| Public verification of priority claims | Implemented |
+| Privacy-preserving salted commitments | Implemented |
+| Basic dApp user journey | Represented in the wireframe |
+| Token incentives and staking | Deferred |
+| DAO governance | Deferred |
+| Extended dispute process | Deferred from the main submission flow |
 
-## Folder Structure
+## Repository Structure
 ```text
 IdeaStamp_A3_Package/
 ├── contracts/
 │   ├── IdeaRegistry.sol
 │   ├── DisputeRegistryLite.sol
-│   └── interfaces/
-│       └── IIdeaRegistry.sol
+│   └── interfaces/IIdeaRegistry.sol
 ├── test/
 │   └── IdeaRegistry.test.js
-├── archive/test-dispute/
-│   └── DisputeRegistryLite.test.js   # not run by npm test; move to test/ to enable
 ├── scripts/
 │   └── deploy.js
-├── docs/
-│   ├── README.md
-│   ├── cursor_execution_guide.md
-│   ├── whitepaper_feature_mapping.md
-│   ├── testing_evidence_template.md
-│   ├── testing_evidence_log.txt
-│   ├── toolchain_versions.md
-│   └── submission_checklist.md
-├── frontend/                 # Next.js + wagmi minimal UI (see Setup)
+├── frontend/
 ├── frontend_wireframe/
 │   └── IdeaStamp_A3_Wireframe.pdf
+├── docs/
+│   ├── testing_evidence_log.txt
+│   ├── toolchain_versions.md
+│   └── whitepaper_feature_mapping.md
 ├── hardhat.config.js
 └── package.json
 ```
 
-## Prerequisites
-- [Node.js](https://nodejs.org/) 18+ or 20+ (LTS recommended)
-- Optional: a browser wallet extension (e.g. MetaMask) for the `frontend/` app
+## Build and Test Instructions
 
-## Setup
-### 1. Install dependencies
+### Prerequisites
+- Node.js 18+ or 20+
+- npm
+
+### Install dependencies
 ```bash
 npm install
 ```
 
-### 2. Compile contracts
+### Compile the contracts
 ```bash
 npm run compile
 ```
 
-### 3. Run unit tests
+### Run the unit tests
 ```bash
 npm test
 ```
 
-### 4. Local chain + deploy (for frontend / wallet)
-**Start a local node before deploying**; otherwise `deploy:local` cannot connect.
+## Unit Testing Scope
+The unit test suite in `test/IdeaRegistry.test.js` covers the main contract behavior, including:
+- successful commitment creation
+- duplicate commitment rejection
+- fee validation
+- successful reveal
+- invalid reveal and double reveal rejection
+- author ownership checks
+- commitment lookup and reveal status checks
+- owner-only administrative operations
+- withdrawal logic
 
-**Terminal A** (keep running):
+Test execution evidence is recorded in `docs/testing_evidence_log.txt`.
+
+## dApp Wireframe
+The wireframe is provided in `frontend_wireframe/IdeaStamp_A3_Wireframe.pdf`. It documents the main user journey required for this prototype:
+- landing page
+- wallet connection entry point
+- commit flow
+- reveal flow
+- verify flow
+- records view
+
+The wireframe is intended to communicate the front-end structure and expected interaction flow rather than a finished visual design.
+
+## Assumptions and Scope
+- Content is hashed off-chain before any blockchain transaction is sent.
+- Full research content is not stored on-chain.
+- `metadataHash` may represent optional metadata associated with the submission.
+- The core assessed workflow is commit, reveal, and verify.
+- Tokenomics, DAO governance, and a full dispute process are outside the scope of this assignment version.
+
+## Local Front-End Prototype
+This repository also contains a minimal Next.js prototype in `frontend/`. It is included as a supporting implementation artifact, but the Assignment 3 requirement is satisfied by the wireframe PDF rather than by a production-ready front end.
+
+If needed for local demonstration:
+
+Terminal A:
 ```bash
 npx hardhat node
 ```
 
-**Terminal B** (deploy to that node):
+Terminal B:
 ```bash
 npm run deploy:local
 ```
-This also **writes** `frontend/.env.local` with the two deployed addresses (creating it from `.env.local.example` if needed). It does **not** change `.env.local.example`, so that file stays a clean template in git.
 
-Hardhat prints test account private keys; import one (e.g. the first) in MetaMask to pay `commit` / `dispute` fees in wei. Network: **RPC** `http://127.0.0.1:8545`, **chain ID** `31337` (matches the `hardhat` chain in wagmi).
-
-**Do not stay on Ethereum Mainnet:** your `.env.local` addresses only exist on the local chain. On mainnet the same `0x…` is a different account — MetaMask/Blockaid may show a “malicious address” warning and you would send real ETH. Switch MetaMask to **Localhost 31337** for this project.
-
-### 5. Minimal web UI (`frontend/`)
-Course-scope UI: injected wallet, local Keccak / `encodePacked`, contract addresses from env.
-
-**Terminal C**:
+Terminal C:
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-If you have not run `deploy:local` yet, copy `cp .env.local.example .env.local` once, then deploy from the repo root to fill in addresses automatically.
-Open the URL shown in the terminal (usually `http://localhost:3000`).
 
-**Important:** `NEXT_PUBLIC_*` variables are picked up when the Next.js dev server **starts**. After you edit `frontend/.env.local`, stop and run `npm run dev` again. Keep `npx hardhat node` running in another terminal so reads like `commitFeeWei` succeed.
+## Toolchain Notes
+- Solidity version: `0.8.24`
+- Hardhat framework: listed in `package.json`
+- Additional version notes: `docs/toolchain_versions.md`
 
-Production check: `cd frontend && npm run build`.
+## Evidence Included
+- smart contract source files
+- executable unit tests
+- test execution log
+- wireframe PDF
+- white paper feature mapping
 
-### After pushing to GitHub
-1. `git clone …` and `cd` into the repo root  
-2. Root: `npm install` → `npm run compile` / `npm test` (optional)  
-3. `npx hardhat node` + `npm run deploy:local` (updates `frontend/.env.local`)  
-4. `frontend/`: `npm install` → `npm run dev` (first time only: `cp .env.local.example .env.local` if deploy has not created `.env.local` yet)  
-
-Do **not** commit `frontend/.env.local` (it is gitignored); each machine needs its own addresses after deploy.
-
-### Sepolia (optional)
-`deploy:sepolia` requires a `networks.sepolia` entry in `hardhat.config.js` (RPC URL, `accounts`, etc.) and test ETH. Skip if you only demo locally.
-
-See `docs/toolchain_versions.md` for versions and `docs/submission_checklist.md` before submission.
-
-## Assumptions
-- The frontend computes the content hash, metadata hash, salt, and commitment hash locally.
-- Full document content is **not** stored on-chain.
-- Optional CID strings may point to IPFS or another content-addressed store, but storage is not required for the MVP.
-- The dispute module is administrative and does not yet include staking or decentralized arbitration.
-
-## Main User Flow
-### Commit
-1. User writes an idea note or uploads a draft.
-2. Frontend computes `contentHash` from the raw bytes.
-3. Frontend computes `metadataHash` from optional metadata.
-4. Frontend generates a random 32-byte salt.
-5. Frontend computes `commitmentHash`.
-6. User submits `commitmentHash` to `IdeaRegistry.commit(...)`.
-
-### Reveal
-1. User re-opens the same content.
-2. Frontend recomputes the same `contentHash`.
-3. User supplies the original salt.
-4. User submits `reveal(...)`.
-5. Contract verifies that the recomputed commitment exists and belongs to the sender.
-
-### Verify
-1. Any verifier recomputes the commitment hash using the revealed values.
-2. The verifier checks that the record exists on-chain and that it has been revealed.
-3. The verifier compares timestamps/block numbers to establish proof-of-priority.
-
-## Deferred Features
-The following features remain consistent with the white paper but are intentionally deferred for Assignment 3:
-- ERC20 IDEA token
-- staking/slashing for disputes
-- DAO governance
-- encrypted file storage gateway
-- organization accounts and subscriptions
-- ORCID, GitHub, Overleaf, or Notion integrations
-
-## Recommended Submission Notes
-For the final A3 submission, include:
-- compiler version
-- Hardhat version
-- screenshot or terminal log of successful test execution
-- exported wireframe PDF
-- short paragraph mapping the prototype back to the white paper
-
-Full checklist: `docs/submission_checklist.md`. Tool versions: `docs/toolchain_versions.md`.
+## Conclusion
+This submission translates the core IdeaStamp white paper proposal into a testable smart contract prototype with a documented user workflow. The implementation demonstrates a clear on-chain design, executable validation through unit tests, and a dApp structure suitable for the Assignment 3 deliverables.
