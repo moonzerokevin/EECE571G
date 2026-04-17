@@ -1,83 +1,66 @@
-# IdeaStamp Assignment 3 Prototype
+# IdeaStamp — Technical Documentation (Supplement)
 
 ## Overview
-This package implements a course-scope prototype for **IdeaStamp**, the Web3 dApp proposed in Assignment 2. The prototype focuses on the core workflow promised in the white paper:
+This folder supplements the **repository root `README.md`**, which is the primary entry point for the final submission.
 
-1. **Commit** a salted hash proving prior possession of an idea or preprint draft.
-2. **Reveal** the original content hash and salt later.
-3. **Verify** that the reveal matches the earlier on-chain commitment.
-4. **Optionally register a dispute** in a lightweight way for contested claims.
+**IdeaStamp** is a Web3 application for timestamped, privacy-preserving commitments to research ideas and drafts. This release implements the core workflow from the project white paper:
 
-This is intentionally **not** a production-ready system and does **not** implement the full long-term tokenomics/governance vision from the white paper.
+1. **Commit** a salted hash that proves prior possession without publishing the full text on-chain.
+2. **Reveal** the content hash and salt later, as the original author.
+3. **Verify** that a revealed claim matches the on-chain commitment.
+4. **Dispute handling** exists at the contract level (`DisputeRegistryLite.sol`) in a minimal form; the shipped web UI focuses on commit / reveal / verify / records.
+
+The implementation is a research prototype, not a production system with full tokenomics or governance.
 
 ## White Paper Alignment
-| White paper feature | Assignment 3 implementation status |
+| White paper feature | Status in this release |
 | --- | --- |
 | Timestamped commitment registry | Implemented in `IdeaRegistry.sol` |
 | Commit–reveal verification | Implemented in `IdeaRegistry.sol` |
-| Public verifiability | Implemented through contract getters + pure hash helper |
-| Privacy-preserving salted commitments | Implemented through off-chain commitment construction |
-| Dispute module | Partially implemented in `DisputeRegistryLite.sol` |
-| ERC20 incentives / staking | Deferred to future work |
-| DAO governance | Deferred to future work |
-| Organization memberships | Deferred to future work |
+| Public verifiability | Contract getters + `computeCommitment` |
+| Privacy-preserving salted commitments | Off-chain hash construction in `frontend/` |
+| Dispute module (minimal) | `DisputeRegistryLite.sol` |
+| ERC20 incentives / staking | Deferred |
+| DAO governance | Deferred |
+| Organization memberships | Deferred |
 
 ## Contract Architecture
-### 1. `IdeaRegistry.sol`
-Main contract for storing research-priority commitments.
+### `IdeaRegistry.sol`
+Stores research-priority commitments and reveal state.
 
 Core responsibilities:
 - store commitment hashes on-chain
 - prevent duplicate commitments
 - record commit timestamp and block number
-- allow reveal of content hash + salt later
-- expose records for verification and user dashboards
+- allow reveal of content hash and salt
+- expose records for verification and the records view
 
 Commitment formula:
 ```solidity
 keccak256(abi.encodePacked(chainId, authorAddress, contentHash, salt, metadataHash))
 ```
 
-### 2. `DisputeRegistryLite.sol`
-Lightweight registry for disputed claims. This contract is intentionally simple for course scope.
+### `DisputeRegistryLite.sol`
+Lightweight registry for disputed claims: open a dispute against an existing commitment, link a challenger commitment, record a reason URI, and allow an owner to mark resolution. No staking or decentralized arbitration in this version.
 
-Core responsibilities:
-- open a dispute against an existing commitment
-- link a challenger commitment to the challenged commitment
-- record a reason URI
-- allow an owner/admin to mark the dispute resolved
-
-## Folder Structure
+## Folder Structure (high level)
 ```text
 IdeaStamp_A3_Package/
 ├── contracts/
-│   ├── IdeaRegistry.sol
-│   ├── DisputeRegistryLite.sol
-│   └── interfaces/
-│       └── IIdeaRegistry.sol
 ├── test/
-│   └── IdeaRegistry.test.js
 ├── archive/test-dispute/
-│   └── DisputeRegistryLite.test.js   # not run by npm test; move to test/ to enable
 ├── scripts/
-│   └── deploy.js
 ├── docs/
-│   ├── README.md
-│   ├── whitepaper_feature_mapping.md
-│   ├── testing_evidence_template.md
-│   ├── testing_evidence_log.txt
-│   └── toolchain_versions.md
 ├── frontend/
 ├── frontend_wireframe/
-│   └── IdeaStamp_A3_Wireframe.pdf
 ├── hardhat.config.js
 └── package.json
 ```
 
 ## Setup
-Authoritative steps (local Hardhat node, deploy, MetaMask, `frontend/.env.local`) are in the **repository root `README.md`**.
+Authoritative run instructions for contracts, deploy, and the web app are in the **root `README.md`**.
 
-Quick commands from the repo root:
+Quick contract commands from the repository root:
 ```bash
 npm install
 npm run compile
@@ -85,47 +68,34 @@ npm test
 ```
 
 ## Assumptions
-- The frontend computes the content hash, metadata hash, salt, and commitment hash locally.
-- Full document content is **not** stored on-chain.
-- Optional CID strings may point to IPFS or another content-addressed store, but storage is not required for the MVP.
-- The dispute module is administrative and does not yet include staking or decentralized arbitration.
+- The frontend computes content hash, metadata hash, salt, and commitment hash locally.
+- Full document content is not stored on-chain.
+- Optional CID strings may point to IPFS or another store; hosting that content is outside this repository.
 
-## Main User Flow
+## Main User Flow (dApp)
 ### Commit
-1. User writes an idea note or uploads a draft.
-2. Frontend computes `contentHash` from the raw bytes.
-3. Frontend computes `metadataHash` from optional metadata.
-4. Frontend generates a random 32-byte salt.
-5. Frontend computes `commitmentHash`.
-6. User submits `commitmentHash` to `IdeaRegistry.commit(...)`.
+1. User provides idea text or a file; the client derives `contentHash`.
+2. Optional metadata yields `metadataHash`.
+3. Client generates salt and computes `commitmentHash`.
+4. User sends `commit(...)` with the required fee.
 
 ### Reveal
-1. User re-opens the same content.
-2. Frontend recomputes the same `contentHash`.
-3. User supplies the original salt.
-4. User submits `reveal(...)`.
-5. Contract verifies that the recomputed commitment exists and belongs to the sender.
+1. User supplies the same content and salt.
+2. Client recomputes `contentHash` and `commitmentHash`.
+3. User sends `reveal(...)`.
 
 ### Verify
-1. Any verifier recomputes the commitment hash using the revealed values.
-2. The verifier checks that the record exists on-chain and that it has been revealed.
-3. The verifier compares timestamps/block numbers to establish proof-of-priority.
+A verifier recomputes the commitment and checks on-chain state (existence, reveal, timestamps).
 
-## Deferred Features
-The following features remain consistent with the white paper but are intentionally deferred for Assignment 3:
+## Deferred Features (relative to the full white paper vision)
 - ERC20 IDEA token
-- staking/slashing for disputes
+- staking or slashing for disputes
 - DAO governance
 - encrypted file storage gateway
 - organization accounts and subscriptions
-- ORCID, GitHub, Overleaf, or Notion integrations
+- external integrations (ORCID, GitHub, Overleaf, Notion, etc.)
 
-## Recommended Submission Notes
-For the final A3 submission, include:
-- compiler version
-- Hardhat version
-- screenshot or terminal log of successful test execution
-- exported wireframe PDF
-- short paragraph mapping the prototype back to the white paper
-
-See also `toolchain_versions.md` in this folder.
+## Additional Files Here
+- `toolchain_versions.md` — dependency versions
+- `testing_evidence_log.txt` / `testing_evidence_template.md` — reproducible command logs
+- `whitepaper_feature_mapping.md` — mapping table for reviewers

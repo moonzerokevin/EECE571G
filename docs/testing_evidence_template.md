@@ -40,24 +40,19 @@ Full output is in **`docs/testing_evidence_log.txt`** (environment, `npm install
 
 ---
 
-## Assignment 3 (EECE571G) — requirement cross-check (from course PDF)
+## Deliverable cross-check (final submission)
 
-Not official grading; follow your TA and rubric.
-
-| Requirement (summary) | This repo |
+| Area | This repository |
 | --- | --- |
-| Core contracts aligned with A2 white paper, compile | `IdeaRegistry.sol`, `DisputeRegistryLite.sol`; commit–reveal–verify + lite dispute; ERC20/staking/DAO deferred (see `README.md`, `whitepaper_feature_mapping.md`). |
-| Comments, events, access control, validation | NatSpec/comments, `event`, `onlyOwner`, custom errors, etc. |
-| Multiple contracts + interaction | `DisputeRegistryLite` uses `IIdeaRegistry`; architecture in root `README.md`. |
-| Unit tests: main paths + failures/unauthorized | Hardhat, 20 tests on `IdeaRegistry` (dispute suite archived, not run by default). |
-| Framework + reproducible steps | `npm test` in `package.json`; evidence in this file and `testing_evidence_log.txt`. |
-| dApp wireframe: main screens and journey | `IdeaStamp_A3_Wireframe.pdf` (root + `frontend_wireframe/`); wallet, Commit/Reveal/Verify, Records, Dispute Lite + admin. |
-| Brief technical doc: compile, test, wireframe | Root `README.md`, `docs/README.md`. |
-| Short mapping to white paper promises | `docs/whitepaper_feature_mapping.md` + README table. |
-| Recommended: compiler, framework, test command, logs/screenshots | `docs/toolchain_versions.md` + this file + `testing_evidence_log.txt`. |
+| Core contracts aligned with the white paper, compile | `IdeaRegistry.sol`, `DisputeRegistryLite.sol`; commit–reveal–verify plus optional lite dispute contract; token/staking/DAO deferred (see root `README.md`, `whitepaper_feature_mapping.md`). |
+| Comments, events, access control, validation | NatSpec, events, `onlyOwner`, custom errors, etc. |
+| Multiple contracts + interaction | `DisputeRegistryLite` uses `IIdeaRegistry`; described in root `README.md`. |
+| Unit tests: main paths + failures / unauthorized | Hardhat, 20 tests on `IdeaRegistry` (dispute suite in `archive/test-dispute/`, not run by `npm test`). |
+| Reproducible commands | `npm test`, `cd frontend && npm run build`; logs in `testing_evidence_log.txt`. |
+| Runnable dApp | `frontend/` — wallet, Commit / Reveal / Verify / My Records. |
+| Wireframe / design reference | `frontend_wireframe/IdeaStamp_A3_Wireframe.pdf` |
+| Technical documentation | Root `README.md`, this folder (`docs/README.md`, mapping, toolchain). |
 
-### “Fully compliant”?
-- **Core deliverables (code, runnable tests, wireframe, docs, white-paper link): covered with verifiable logs.**
-- Suggested structure mentioned a **PDF** README/report; primary doc is **`README.md`**. If required, export to PDF before submission.
-- Screenshots are *recommended*; logs can substitute if the rubric allows.
-- Runnable `frontend/` goes beyond “wireframe only”; it does not replace the wireframe PDF but supports the same flows.
+### Notes
+- The **live UI** in `frontend/` is the primary demonstration surface; the **PDF wireframe** documents the intended screen structure and flow.
+- Export root `README.md` to PDF only if a course portal still requires a PDF report.

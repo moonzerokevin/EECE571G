@@ -2,7 +2,7 @@
   "name": "ideastamp-a3",
   "version": "1.0.0",
   "private": true,
-  "description": "Assignment 3 prototype for IdeaStamp: smart contracts, tests, and dApp wireframe.",
+  "description": "IdeaStamp final submission: smart contracts, Hardhat tests, and Next.js dApp.",
   "scripts": {
     "compile": "hardhat compile",
     "test": "hardhat test",

@@ -26,7 +26,7 @@ IdeaStamp provides a privacy-preserving, timestamped, blockchain-based registry 
 **Prototype implementation:**
 - publicly readable commitment records
 - deterministic commitment formula
-- author dashboard and verification pages represented in the wireframe
+- author dashboard and verification flows in `frontend/` and in the wireframe PDF
 
 ### Feature 4: Dispute Handling
 **White paper promise:** a dispute process exists when claims conflict.
@@ -35,10 +35,10 @@ IdeaStamp provides a privacy-preserving, timestamped, blockchain-based registry 
 - `DisputeRegistryLite.openDispute(...)`
 - `DisputeRegistryLite.resolveDispute(...)`
 
-This is deliberately limited to dispute registration plus admin resolution for course scope.
+This is deliberately limited to dispute registration plus owner resolution in the prototype.
 
 ## Deferred White Paper Features
-The following features are acknowledged but not implemented in Assignment 3:
+The following features are acknowledged but not implemented in this release:
 - ERC20 token incentives and staking
 - decentralized arbitrator selection
 - DAO treasury governance

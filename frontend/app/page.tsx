@@ -3,11 +3,11 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold tracking-tight">IdeaStamp — course prototype</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">IdeaStamp</h1>
       <p className="leading-relaxed text-zinc-600 dark:text-zinc-400">
-        Minimal end-to-end flow from the Assignment 2 white paper: on-chain salted commitments, optional
-        reveal, and public verification. Token staking, DAO, and extended dispute flows are out of scope for
-        this UI prototype.
+        End-to-end flow from the project white paper: salted commitments on-chain, optional reveal, and
+        public verification. Token staking, DAO governance, and a full dispute marketplace are outside the
+        scope of this release.
       </p>
       <ul className="grid gap-3 sm:grid-cols-2">
         {[

@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "IdeaStamp · A3",
-  description: "Commit–reveal idea registry prototype (course scope)",
+  title: "IdeaStamp",
+  description: "Commit–reveal idea registry — final project dApp",
 };
 
 export default function RootLayout({

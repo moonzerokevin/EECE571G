@@ -5,7 +5,7 @@ import "./interfaces/IIdeaRegistry.sol";
 
 /**
  * @title DisputeRegistryLite
- * @notice Lightweight course-scope dispute registration contract for IdeaStamp.
+ * @notice Lightweight dispute registration contract for IdeaStamp (prototype scope).
  * @dev This contract does not implement token staking or arbitrator voting. It simply
  *      records disputes against existing commitments and allows an admin to mark them resolved.
  */

@@ -10,7 +10,7 @@ const links = [
   { href: "/reveal", label: "Reveal" },
   { href: "/verify", label: "Verify" },
   { href: "/records", label: "My Records" },
-  // Dispute UI hidden for course demo scope; route /dispute redirects home.
+  // Dispute UI not shipped; /dispute redirects home for old links.
 ];
 
 export function Nav() {

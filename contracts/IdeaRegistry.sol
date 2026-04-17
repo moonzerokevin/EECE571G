@@ -3,7 +3,7 @@ pragma solidity ^0.8.24;
 
 /**
  * @title IdeaRegistry
- * @notice Course-scope commit-reveal registry for research idea priority proofs.
+ * @notice Commit-reveal registry for research idea priority proofs (prototype).
  * @dev The contract stores salted commitments on-chain and later allows the
  *      original author to reveal the corresponding content hash and salt.
  *
