@@ -112,6 +112,16 @@ npm run dev
 ```
 Open the URL printed in the terminal (typically `http://localhost:3000`). Connect a browser wallet to **Localhost / chain ID 31337** and use a Hardhat test account for transactions.
 
+### Automated tests vs browser testing
+- **`npm test`** runs entirely inside Hardhat. It does not use MetaMask or a browser. Anyone with Node.js and the repo dependencies should get the same automated test results after `npm install`.
+- **Manual testing in the browser** depends on MetaMask (or another injected wallet), the correct local network, and an account funded with Hardhat’s fake ETH. That path is environment-specific; two machines can behave differently if the wallet is on the wrong chain, uses a stale local state, or shows security prompts for localhost contract addresses.
+
+### MetaMask on localhost (common fixes)
+1. **Network:** Add or select **Localhost 8545** (or a custom network) with **RPC** `http://127.0.0.1:8545` and **chain ID** `31337`. Do not use Ethereum mainnet for this demo.
+2. **Account with ETH:** When `npx hardhat node` starts, it prints **test private keys**. In MetaMask: import account → paste one of those keys. That account receives 10000 test ETH on the local chain only.
+3. **Restart clean:** If transactions fail with odd nonce or “wrong network” errors, restart `npx hardhat node`, run `npm run deploy:local` again, restart `npm run dev`, and in MetaMask try **Settings → Advanced → Clear activity tab data** for the local network (wording varies by version).
+4. **Dedicated browser profile:** Some developers use a separate Chrome profile (or a fresh MetaMask install) only for local chain work so mainnet accounts, old localhost allowances, and other extensions do not interfere. That is optional but often avoids the “it worked only after I isolated the wallet” situation.
+
 **Production build check:**
 ```bash
 cd frontend
