@@ -52,7 +52,7 @@ Not official grading; follow your TA and rubric.
 | Unit tests: main paths + failures/unauthorized | Hardhat, 20 tests on `IdeaRegistry` (dispute suite archived, not run by default). |
 | Framework + reproducible steps | `npm test` in `package.json`; evidence in this file and `testing_evidence_log.txt`. |
 | dApp wireframe: main screens and journey | `IdeaStamp_A3_Wireframe.pdf` (root + `frontend_wireframe/`); wallet, Commit/Reveal/Verify, Records, Dispute Lite + admin. |
-| Brief technical doc: compile, test, wireframe | Root `README.md`, `docs/README.md`, `docs/submission_checklist.md`. |
+| Brief technical doc: compile, test, wireframe | Root `README.md`, `docs/README.md`. |
 | Short mapping to white paper promises | `docs/whitepaper_feature_mapping.md` + README table. |
 | Recommended: compiler, framework, test command, logs/screenshots | `docs/toolchain_versions.md` + this file + `testing_evidence_log.txt`. |
 

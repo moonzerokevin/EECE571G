@@ -6,3 +6,10 @@ cache
 .env.local
 frontend/.env.local
 frontend/.next
+
+# Generated archives / duplicate A3 hand-in trees (do not commit)
+*.zip
+IdeaStamp_A3_Submission/
+
+# Course handouts (keep locally; not part of the open-source project tree)
+EECE571G_Assignment_3.pdf

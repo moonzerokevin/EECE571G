@@ -63,12 +63,10 @@ IdeaStamp_A3_Package/
 │   └── deploy.js
 ├── docs/
 │   ├── README.md
-│   ├── cursor_execution_guide.md
 │   ├── whitepaper_feature_mapping.md
 │   ├── testing_evidence_template.md
 │   ├── testing_evidence_log.txt
-│   ├── toolchain_versions.md
-│   └── submission_checklist.md
+│   └── toolchain_versions.md
 ├── frontend/
 ├── frontend_wireframe/
 │   └── IdeaStamp_A3_Wireframe.pdf
@@ -130,4 +128,4 @@ For the final A3 submission, include:
 - exported wireframe PDF
 - short paragraph mapping the prototype back to the white paper
 
-See also `submission_checklist.md` and `toolchain_versions.md` in this folder.
+See also `toolchain_versions.md` in this folder.
